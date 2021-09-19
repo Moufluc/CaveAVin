@@ -4,7 +4,7 @@
       :width="width"
       :height="height"
       ref="canvas"
-      @click="doAction">jjhgjg
+      @click="doAction">
       </canvas>
   </v-card>
 </template>
@@ -25,24 +25,16 @@ export default {
    * Initialisation des attributs
    */
   mounted() {
-      //@TODO : adapter le width et le height à la taille de l'écran (un mode mobile et un mode + xx pixel de wi  dth..)
-    var c = this.$refs.canvas;
-    console.log(c)
-    this.domElement = c;
-    var ctx = c.getContext("2d");
-    this.vueCanvas = ctx;
-    /*this.hitCanvas = document.createElement("canvas");
-    this.hitCanvas.width = this.width;
-    this.hitCanvas.height = this.height;
-    this.hitCanvas.style.opacity = 0.2;
-    this.invisibleVueCanvas = this.hitCanvas.getContext("2d");
-    this.invisibleVueCanvas.opacity = 0.2;
-    */
-    this.width=this.cave.nbCols*this.cave.sizeCase*2
-    this.height=this.cave.nbLignes*this.cave.sizeCase*2
-    console.log(this.width,this.height)
+    this.$nextTick(function () {
+    this.$emit('getCaveContent', this.id)
+  })
+
+
+    
     
   },
+
+
   /**
    *
    * Propriété fournies par le parent
@@ -56,12 +48,42 @@ export default {
   },
 
   props: {
-    cave: Cave,
+    id: Number,
+    object:Object
   },
   /**
    * Ameconnage
    */
   watch: {
+    object:function() {
+        console.log(this.object)
+        //@TODO : adapter le width et le height à la taille de l'écran (un mode mobile et un mode + xx pixel de wi  dth..)
+      var c = this.$refs.canvas;
+      console.log(c)
+      this.domElement = c;
+      var ctx = c.getContext("2d");
+      this.vueCanvas = ctx;
+      /*this.hitCanvas = document.createElement("canvas");
+      this.hitCanvas.width = this.width;
+      this.hitCanvas.height = this.height;
+      this.hitCanvas.style.opacity = 0.2;
+      this.invisibleVueCanvas = this.hitCanvas.getContext("2d");
+      this.invisibleVueCanvas.opacity = 0.2;
+      */
+      this.domElement.width=this.object.nbCols*this.object.sizeCase*2
+      this.domElement.height=this.object.nbLignes*this.object.sizeCase*2
+      //this.width=this.vueCanvas.width
+      //this.height=this.vueCanvas.height
+      console.log(this.width,this.height)
+
+      this.redrawAll()
+    },
+    id:function(){
+      this.$emit('getCaveContent', this.id)
+    },
+    width:function(){
+      this.redrawAll()
+    }
   },
   methods: {
     
@@ -89,7 +111,8 @@ export default {
       
       //this.vueCanvas.clearRect(0, 0, this.width, this.height);
       //this.invisibleVueCanvas.clearRect(0, 0, this.width, this.height);
-      this.cave.draw(ctx)//Les cercles ne se dessinent pas... un  problème CSS sans doute, revoir la configuration....
+      console.log("redraw")
+      this.object.draw(ctx)//Les cercles ne se dessinent pas... un  problème CSS sans doute, revoir la configuration....
       
 
     }

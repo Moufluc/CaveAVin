@@ -19,8 +19,10 @@ export default class Cave{
      * @param {*} color 
      */
   draw(ctx){
+    console.log(ctx)
     for(var i=0;i<this.nbLignes;i++){
         for(var j=0;j<this.nbCols;j++){
+
           ctx.beginPath();
           const x =(j)*this.sizeCase*2+this.sizeCase
           const y=(i)*this.sizeCase*2+this.sizeCase
@@ -29,7 +31,7 @@ export default class Cave{
           ctx.arc( x, y, this.sizeCase,0,2*Math.PI)
           ctx.fill()
           ctx.stroke()
-          console.log(this.sizeCase,ctx.strokeStyle)
+          
         }
     }
   }
